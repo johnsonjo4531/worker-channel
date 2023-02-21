@@ -1,9 +1,9 @@
 {
-  "name": "worker-com",
+  "name": "worker-channel",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnsonjo4531/worker-com"
+    "url": "https://github.com/johnsonjo4531/worker-channel"
   },
   "version": "1.0.0",
   "source": "src/main.ts",
@@ -27,7 +27,7 @@
     "worker",
     "communication",
     "com",
-    "worker-com",
+    "worker-channel",
     "message",
     "messaging",
     "channel",

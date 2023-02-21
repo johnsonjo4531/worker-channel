@@ -28,11 +28,11 @@ export type NecessaryMessages<
   Write extends DataMessage,
   Read extends DataMessage
 > =
-  | { type: "worker-com:change-reader"; data: MessagePort }
-  | { type: "worker-com:change-writer"; data: MessagePort }
-  | { type: "worker-com:close-writer"; data: Write["type"] }
-  | { type: "worker-com:close-reader"; data: Read["type"] }
-  | { type: "worker-com:acknowledge"; data: boolean };
+  | { type: "worker-channel:change-reader"; data: MessagePort }
+  | { type: "worker-channel:change-writer"; data: MessagePort }
+  | { type: "worker-channel:close-writer"; data: Write["type"] }
+  | { type: "worker-channel:close-reader"; data: Read["type"] }
+  | { type: "worker-channel:acknowledge"; data: boolean };
 
 type ChannelConnection = MessagePort | Worker | typeof globalThis;
 
@@ -102,7 +102,7 @@ export abstract class Channel<
     action: "change-reader" | "change-writer",
     connection: MessagePort
   ) {
-    this._sendInternal(target, `worker-com:${action}`, connection, [
+    this._sendInternal(target, `worker-channel:${action}`, connection, [
       connection,
     ]);
   }
@@ -220,7 +220,11 @@ export abstract class Channel<
         return () => {
           (async () => {
             const writer = this.writables?.get(command);
-            this._sendInternal("writeTo", "worker-com:close-writer", command);
+            this._sendInternal(
+              "writeTo",
+              "worker-channel:close-writer",
+              command
+            );
             if (this.writeTo instanceof MessagePort) this.writeTo.close();
             if (writer && (await writerIsClosed(writer))) return;
             this.writables?.get(command)?.close();
@@ -236,7 +240,11 @@ export abstract class Channel<
       get: (_target, command) => {
         return () => {
           this.readables?.get(command)?.releaseLock();
-          this._sendInternal("readFrom", "worker-com:close-reader", command);
+          this._sendInternal(
+            "readFrom",
+            "worker-channel:close-reader",
+            command
+          );
           if (this.readFrom instanceof MessagePort) this.readFrom.close();
         };
       },
@@ -280,21 +288,21 @@ export abstract class Channel<
   }
 
   protected async listener(ev: MessageEvent<NecessaryMessages<Read, Write>>) {
-    if (ev.data.type === "worker-com:change-reader") {
+    if (ev.data.type === "worker-channel:change-reader") {
       // sending inner listening channel
       this.unlisten();
       this.readFrom = ev.data.data;
       ev.data.data.start();
       this.listen();
       return;
-    } else if (ev.data.type === "worker-com:change-writer") {
+    } else if (ev.data.type === "worker-channel:change-writer") {
       // Sending inner posting channel.
       // this._send("acknowledge", true);
       this.writeTo = ev.data.data;
       return;
-    } else if (ev.data.type === "worker-com:close-writer") {
+    } else if (ev.data.type === "worker-channel:close-writer") {
       this.close.writer[ev.data.data]();
-    } else if (ev.data.type === "worker-com:close-reader") {
+    } else if (ev.data.type === "worker-channel:close-reader") {
       this.cancel.reader[ev.data.data]();
     } else {
       // send data accordingi to type.

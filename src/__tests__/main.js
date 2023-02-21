@@ -1,4 +1,8 @@
-const { ReadWriteChannel, ReadChannel, WriteChannel } = require("worker-com");
+const {
+  ReadWriteChannel,
+  ReadChannel,
+  WriteChannel,
+} = require("worker-channel");
 
 test("should read and write to Channel", async () => {
   const channel = new MessageChannel();

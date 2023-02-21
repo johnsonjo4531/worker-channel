@@ -1,2 +1,2 @@
 go:
-	npm link worker-com && npm run start
+	npm link worker-channel && npm run start

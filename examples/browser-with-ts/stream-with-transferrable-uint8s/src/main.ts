@@ -1,4 +1,4 @@
-import { ReadWriteChannel, consumeStream, sleep } from "worker-com";
+import { ReadWriteChannel, consumeStream, sleep } from "worker-channel";
 import { MyMessage } from "./message-types";
 
 const worker1 = new Worker(new URL("./worker.ts", import.meta.url), {

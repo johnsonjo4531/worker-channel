@@ -1,4 +1,4 @@
-import { ReadWriteChannel } from "worker-com";
+import { ReadWriteChannel } from "worker-channel";
 import { MyMessage } from "./message-types.js";
 
 const rwChannel = new ReadWriteChannel<MyMessage, MyMessage>();

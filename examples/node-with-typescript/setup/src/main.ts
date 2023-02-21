@@ -1,5 +1,5 @@
 import Worker from "web-worker";
-import { ReadWriteChannel } from "worker-com";
+import { ReadWriteChannel } from "worker-channel";
 import { MessageType } from "./message-types.js";
 
 /** @ts-ignore-next-line */

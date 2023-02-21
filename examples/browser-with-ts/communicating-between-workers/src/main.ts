@@ -1,4 +1,4 @@
-import { ReadChannel, WriteChannel } from "worker-com";
+import { ReadChannel, WriteChannel } from "worker-channel";
 import { MyMessage } from "./message-types.js";
 
 /// Setup the workers we want to communicate with

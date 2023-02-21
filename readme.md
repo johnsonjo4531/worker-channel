@@ -1,4 +1,4 @@
-#  worker-com
+#  worker-channel
 
 A Worker Communication library
 
@@ -22,7 +22,7 @@ The major primitives are a read, write, and read/write channel.
 First install the package.
 
 ```bash
-npm i worker-com
+npm i worker-channel
 ```
 
 ### An Example
@@ -48,7 +48,7 @@ export type MessageType = {
 ```ts
 import { 
   WriteChannel 
-} from "worker-com";
+} from "worker-channel";
 import { 
   MessageType 
 } from "./message-types";
@@ -96,7 +96,7 @@ const wChannel = new WriteChannel<
 ```ts
 import { 
   ReadChannel 
-} from "worker-com";
+} from "worker-channel";
 import { 
   MessageType 
 } from "./message-types";
@@ -147,7 +147,7 @@ export type MessageType = {
 ```ts
 import { 
   ReadWriteChannel 
-} from "worker-com";
+} from "worker-channel";
 import { 
   MessageType 
 } from "./message-types";
@@ -197,7 +197,7 @@ const rwChannel = new ReadWriteChannel<
 ```ts
 import { 
   ReadWriteChannel 
-} from "worker-com";
+} from "worker-channel";
 import { 
   MessageType 
 } from "./message-types";
