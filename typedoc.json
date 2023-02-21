@@ -1,0 +1,10 @@
+{
+  "name": "Worker Channel",
+  "navigationLinks": {
+    "API Docs": "/modules",
+    "GitHub": "https://github.com/johnsonjo4531/worker-channel"
+  },
+  "customCss": "./docs.css",
+  "lightHighlightTheme": "github-light",
+  "darkHighlightTheme": "material-theme-palenight"
+}

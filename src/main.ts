@@ -1,87 +1,18 @@
 /** @public @module main*/
+import type {
+  DataMessage,
+  InternalReadQueue,
+  InternalWriteQueue,
+  InternalReadWriteQueue,
+  NecessaryMessages,
+  IChannelOptions,
+  ChannelRelease,
+  ChannelWrite,
+  ChannelRead,
+  ChannelReadAll,
+} from "./types";
 import { consumeReader, writerIsClosed } from "./utils";
 
-type ChannelWrite<DataMessages extends DataMessage> = {
-  [P in DataMessages["type"]]: (
-    data: (DataMessages & { type: P })["data"],
-    transfer?: Transferable[]
-  ) => void;
-};
-
-type ChannelRelease<DataMessages extends DataMessage> = {
-  [P in DataMessages["type"]]: () => void;
-};
-
-type ChannelRead<DataMessages extends DataMessage> = {
-  [P in DataMessages["type"]]: () => Promise<
-    (DataMessages & { type: P })["data"]
-  >;
-};
-
-type ChannelReadAll<DataMessages extends DataMessage> = {
-  [P in DataMessages["type"]]: () => AsyncGenerator<
-    (DataMessages & { type: P })["data"]
-  >;
-};
-
-export type NecessaryMessages<
-  Write extends DataMessage,
-  Read extends DataMessage
-> =
-  | { type: "worker-channel:change-reader"; data: MessagePort }
-  | { type: "worker-channel:change-writer"; data: MessagePort }
-  | { type: "worker-channel:close-writer"; data: Write["type"] }
-  | { type: "worker-channel:close-reader"; data: Read["type"] }
-  | { type: "worker-channel:acknowledge"; data: boolean };
-
-type ChannelConnection = MessagePort | Worker | typeof globalThis;
-
-/** Channel options */
-export interface IChannelOptions {
-  /** Controls aborting the Channel. Basically the same as calling end. */
-  controller?: AbortController;
-  /** Where to write the messages to.
-   * Defaults to the UI/main thread.
-   * @default WorkerGlobalScope
-   */
-  writeTo?: ChannelConnection;
-  /** Where to read the messages from.
-   * Defaults to the UI/main thread.
-   * @default WorkerGlobalScope
-   */
-  readFrom?: ChannelConnection;
-}
-
-/** A message type should usually be denoted by a union from the consumer of this library. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DataMessage<Data = any> =
-  | {
-      /** The channel to create, write and read from. */
-      type: string | number | symbol;
-      /** The data the channel writes or reads */
-      data: Data;
-    }
-  | {
-      /** The channel to create, write and read from. */
-      type: string | number | symbol;
-      /** The data the channel writes or reads */
-      data?: Data;
-    };
-type InternalReadQueue<Read extends DataMessage> = Record<
-  Read["type"],
-  ReadableStreamDefaultReader<Read["data"]>
->;
-type InternalWriteQueue<Write extends DataMessage> = Record<
-  Write["type"],
-  WritableStreamDefaultWriter<Write["data"]>
->;
-type InternalReadWriteQueue<
-  Read extends DataMessage,
-  Write extends DataMessage
-> = Record<
-  Read["type"] | Write["type"],
-  TransformStream<Read["data"], Write["data"]>
->;
 export abstract class Channel<
   Read extends DataMessage,
   Write extends DataMessage
@@ -107,7 +38,7 @@ export abstract class Channel<
     ]);
   }
 
-  _sendInternal<T extends NecessaryMessages<Read, Write>["type"]>(
+  private _sendInternal<T extends NecessaryMessages<Read, Write>["type"]>(
     target: "readFrom" | "writeTo",
     type: T,
     data: (NecessaryMessages<Read, Write> & { type: T })["data"],
@@ -546,3 +477,4 @@ export class ReadWriteChannel<
 }
 
 export * from "./utils";
+export * from "./types";

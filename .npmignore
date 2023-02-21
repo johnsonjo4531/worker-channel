@@ -1,5 +1,6 @@
-./src/
-.parcel-cache/
-.editorconfig
-Makefile
-examples/
+*
+!dist/*
+!LICENSE.md
+!package.json
+!package-lock.json
+!readme.md
