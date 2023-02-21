@@ -24,6 +24,7 @@
     "lint": "eslint -c ./.eslintrc ./src/main.ts",
     "watch": "parcel watch",
     "build": "parcel build",
+    "gh-pages": "gh-pages -d worker-channel",
     "start": "npm run test; npm run lint; npm run build"
   },
   "keywords": [
@@ -58,6 +59,7 @@
     "@typescript-eslint/parser": "^5.53.0",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
+    "gh-pages": "^5.0.0",
     "jest": "^29.4.3",
     "parcel": "^2.8.3",
     "typedoc": "^0.23.25",
