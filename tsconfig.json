@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "target": "ES2018",
+    "useDefineForClassFields": true,
+    "module": "CommonJS",
+    "allowJs": true,
+    "lib": [
+      "ES2018",
+      "DOM",
+      "WebWorker"
+    ],
+    // "moduleResolution": "node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "noEmit": true,
+    "outDir": "dist",
+    "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "target": "ES2018",
+    "useDefineForClassFields": true,
+    "module": "NodeNext",
+    "lib": [
+      "ESNext",
+      "DOM",
+      "WebWorker"
+    ],
+    // "moduleResolution": "node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": false,
+    "noEmit": true,
+    "outDir": "dist",
+    "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "target": "ES2018",
+    "useDefineForClassFields": true,
+    "module": "NodeNext",
+    "lib": [
+      "ESNext",
+    ],
+    // "moduleResolution": "node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,5 @@
+./src/
+.parcel-cache/
+.editorconfig
+Makefile
+examples/
