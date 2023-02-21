@@ -24,7 +24,7 @@
     "lint": "eslint -c ./.eslintrc ./src/main.ts",
     "watch": "parcel watch",
     "build": "parcel build",
-    "gh-pages": "gh-pages -d worker-channel",
+    "gh-pages": "npm run docs && gh-pages -d worker-channel",
     "start": "npm run test; npm run lint; npm run build"
   },
   "keywords": [
