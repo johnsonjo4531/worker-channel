@@ -1,3 +1,5 @@
+# Worker-Channel
+
 A modern zero-dependency Worker communication and orchestration library
 
 - [What](#what)
