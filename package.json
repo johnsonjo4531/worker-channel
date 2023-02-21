@@ -5,6 +5,7 @@
     "type": "git",
     "url": "https://github.com/johnsonjo4531/worker-channel"
   },
+  "homepage": "https://johnsonjo4531.github.io/worker-channel/",
   "license": "MIT",
   "version": "1.0.2",
   "source": "src/main.ts",
@@ -18,7 +19,7 @@
   },
   "scripts": {
     "prepublish": "npm run build && npm run lint && npm run test",
-    "docs": "typedoc src/main.ts",
+    "docs": "typedoc src/main.ts --excludeInternal --out worker-channel",
     "test": "jest --detectOpenHandles",
     "lint": "eslint -c ./.eslintrc ./src/main.ts",
     "watch": "parcel watch",

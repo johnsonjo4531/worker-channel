@@ -17,13 +17,14 @@ export abstract class Channel<
   Read extends DataMessage,
   Write extends DataMessage
 > {
+  /** @internal */
   protected internalQueues!: {
     read?: InternalReadQueue<Read>;
     write?: InternalWriteQueue<Write>;
     transform?: InternalReadWriteQueue<Read, Write>;
   };
 
-  /** Connect the readFrom or writeTo worker/port's to either recieve from or send to to a different message port.
+  /** Connect the readFrom or writeTo worker/port to either recieve from or send to to a different message port.
    * @param target The worker/port to send the `connection` change to.
    * @param action Whether you want to change the "writable" end or the "readable" end of the `target`
    * @param connection The connection that should now be written to or read from.
@@ -38,6 +39,7 @@ export abstract class Channel<
     ]);
   }
 
+  /** @internal */
   private _sendInternal<T extends NecessaryMessages<Read, Write>["type"]>(
     target: "readFrom" | "writeTo",
     type: T,
@@ -67,9 +69,14 @@ export abstract class Channel<
     this.internalQueues = {};
     this.start();
   }
+  /** @internal */
   protected readonly controller?: IChannelOptions["controller"];
+  /** @internal */
   protected writeTo: IChannelOptions["writeTo"];
+  /** @internal */
   protected readFrom: IChannelOptions["readFrom"];
+
+  /** @internal */
   private transforms?: Map<
     keyof InternalReadWriteQueue<Read, Write>,
     InternalReadWriteQueue<Read, Write>[keyof InternalReadWriteQueue<
@@ -77,15 +84,20 @@ export abstract class Channel<
       Write
     >]
   >;
+
+  /** @internal */
   private readables?: Map<
     keyof InternalReadQueue<Read>,
     InternalReadQueue<Read>[keyof InternalReadQueue<Read>]
   >;
+
+  /** @internal */
   private writables?: Map<
     keyof InternalWriteQueue<Write>,
     InternalWriteQueue<Write>[keyof InternalWriteQueue<Write>]
   >;
 
+  /** @internal */
   protected readWriteSetup() {
     this.transforms = new Map();
     this.internalQueues.transform = new Proxy(
@@ -106,6 +118,7 @@ export abstract class Channel<
     this.writeSetup();
   }
 
+  /** @internal */
   protected readSetup() {
     this.readables = new Map();
     this.internalQueues.read = new Proxy({} as InternalReadQueue<Read>, {
@@ -125,6 +138,7 @@ export abstract class Channel<
     });
   }
 
+  /** @internal */
   protected writeSetup() {
     this.writables = new Map();
     this.internalQueues.write = new Proxy({} as InternalWriteQueue<Write>, {
@@ -144,7 +158,17 @@ export abstract class Channel<
     });
   }
 
-  /** Propagate close on all writers */
+  /** Propagate close on all writers of channel
+   *
+   * @example
+   *
+   * ```ts
+   * const writer = new WriteChannel();
+   *
+   * // closes the "string" channel.
+   * writer.close.writer.string();
+   * ```
+   */
   close = {
     writer: new Proxy({} as ChannelRelease<Write>, {
       get: (_target, command) => {
@@ -165,7 +189,17 @@ export abstract class Channel<
     }),
   };
 
-  /** Propagate cancel on all readers */
+  /** Propagate cancel on all readers
+   *
+   * @example
+   *
+   * ```ts
+   * const rChannel = new ReadChannel();
+   *
+   * // cancels the "string" channel.
+   * rChannel.cancel.reader.string();
+   * ```
+   */
   cancel = {
     reader: new Proxy({} as ChannelRelease<Read>, {
       get: (_target, command) => {
@@ -182,6 +216,7 @@ export abstract class Channel<
     }),
   };
 
+  /** @internal */
   protected _send<T extends Write["type"]>(
     type: T,
     data: (Write & { type: T })["data"],
@@ -190,12 +225,14 @@ export abstract class Channel<
     return this.writeTo?.postMessage({ type, data }, transfer ?? []);
   }
 
+  /** @internal */
   protected async _read<T extends Read["type"]>(
     type: T
   ): Promise<Read["data"] | undefined> {
     return (await this.internalQueues.read?.[type]?.read())?.value;
   }
 
+  /** @internal */
   protected async *_readAll<T extends Read["type"]>(
     type: T
   ): AsyncGenerator<(Read & { type: T })["data"]> {
@@ -204,6 +241,7 @@ export abstract class Channel<
     yield* consumeReader(result);
   }
 
+  /** @internal */
   protected async listen() {
     this.readFrom?.addEventListener?.(
       "message",
@@ -211,6 +249,7 @@ export abstract class Channel<
     );
   }
 
+  /** @internal */
   protected async unlisten() {
     this.readFrom?.removeEventListener?.(
       "message",
@@ -218,6 +257,7 @@ export abstract class Channel<
     );
   }
 
+  /** @internal */
   protected async listener(ev: MessageEvent<NecessaryMessages<Read, Write>>) {
     if (ev.data.type === "worker-channel:change-reader") {
       // sending inner listening channel
