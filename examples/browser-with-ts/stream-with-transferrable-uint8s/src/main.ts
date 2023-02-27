@@ -13,7 +13,7 @@ const rwChannel = new ReadWriteChannel<MyMessage, MyMessage>({
   readFrom: worker1,
 });
 
-// Kick of first communication
+// Kick off first communication
 const rstream = new ReadableStream<Uint8Array>({
   async start(controller) {
     const encoder = new TextEncoder();
